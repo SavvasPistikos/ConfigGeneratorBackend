@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="javascript/backend/configurationcalls.js"></script>
+    <script src="javascript/backend/internalpathscalls.js"></script>
+    <script src="javascript/backend/swaggercalls.js"></script>
+    <script src="javascript/createInternalApisPathModal.js"></script>
+    <script src="javascript/createInternalApisTab.js"></script>
+    <script src="javascript/globalvariables.js"></script>
+    <script src="javascript/createPathEntry.js"></script>
+    <script src ="javascript/createTableFromDatabase.js"></script>
+    <script src="javascript/infoModal.js"></script>
+    <script src="javascript/searchBox.js"></script>
+    <script src="javascript/managecheckboxes.js"></script>
+    <script src="javascript/generate.js"></script>
+    <script src="javascript/json2yaml.js"></script>
+    <script src="javascript/tabmanagement.js"></script>
+    <script src="javascript/mydatabase.js"></script>
+    <script src="javascript/createtabs.js"></script>
+    <meta charset="UTF-8" content="width=device-width, initial-scale=1">
+    <style>
+        /*        #jsonOutput {
+                    top: 40%;
+                    left: 50%;
+                    width:30em;
+                    height:18em;
+                    margin-top: -9em; !*set to a negative number 1/2 of your height*!
+                    margin-left: -15em; !*set to a negative number 1/2 of your width*!
+                    border: 1px solid #ccc;
+                    background-color: #f3f3f3;
+                    position:fixed;
+                }*/
+
+        .remove {
+            background: url("images/trash.png");
+            background-size: cover;
+            margin: 4px 2px;
+            width: 20px;
+            height: 20px;
+        }
+
+        #swaggerJson {
+            resize: none;
+        }
+
+        .mybutton {
+            background-size: cover;
+            margin: 4px 2px;
+        }
+
+        .gbutton {
+            background-size: cover;
+            margin: 4px 2px;
+        }
+
+        .dropdown-submenu {
+            position: relative;
+        }
+
+        .dropdown-submenu .dropdown-menu {
+            top: 0;
+            left: 100%;
+            margin-top: -1px;
+        }
+
+        .row {
+            float: left;
+            margin-left: 5px;
+        }
+
+        .buttonss {
+            float: bottom;
+        }
+        input[type=checkbox] {
+            margin: 4px 0px 0px 4px;
+        }
+
+    </style>
+
+</head>
+<body>
+
+<div class="container">
+    <h2>ApiGatewayJ Configuration Tool</h2>
+
+    <div class="tabbable boxed parentTabs">
+        <ul class="nav nav-tabs" id="outer">
+            <li id="databasemanager"><a data-toggle="tab" href="#manageswaggers">Manage Swaggers</a></li>
+            <li><a data-toggle="tab" href="#manage">Edit Configuration</a></li>
+            <li><a data-toggle="tab" href="#import">Import Config</a></li>
+            <li><a data-toggle="tab" href="#output">Output</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div id="manageswaggers" class="tab-pane fade">
+            </div>
+
+            <div id="manage" class="tab-pane fade">
+                <div class="tabbable">
+                    <ul id="services" class="nav nav-tabs">
+                        <li id="generate">
+                            <div id="buttons">
+                                <button type="button" style="margin: 5px 5px 5px 5px" class="btn btn-primary" onclick=generate(this)>
+                                    Generate
+                                </button>
+                            </div>
+                        </li>
+                        <li class = "pull-right" style="margin: 5px 5px 5px 5px"><input class="form-control" id="myInput" type="text" placeholder="Search.."></li>
+                    </ul>
+                    <div class="tab-content" id="swaggers">
+                    </div>
+                </div>
+            </div>
+            <div id="import" class="tab-pane fade">
+                <div class="input-group">
+                    <textarea class="form-control custom-control" rows="25" style="resize:none"
+                              id="input-field"></textarea>
+                    <span class="input-group-addon btn btn-primary" onclick=importConfig()>Import</span>
+                </div>
+            </div>
+            <div id="output" class="tab-pane fade">
+                <textarea id="jsonOutput" rows="30" cols="50"></textarea>
+                <ul class = "pull-right" style="margin: 5px 5px 5px 5px">
+                    <button type="button" style="margin: 5px 5px 5px 5px" class="btn btn-primary" onclick=saveConfiguration()>
+                        Save
+                    </button>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="container" id="modals">
+    <div class="modal fade" id="InsertOrUpdateForm" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+<!--                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="InsertOrUpdateFormTitle">
+                    </h4>
+                </div>-->
+
+                <!-- Modal Body -->
+                <div class="modal-body">
+                    <label for="serviceId"></label><input hidden value="" id="serviceId"/>
+                    <div class="form-group">
+                        <label for="serviceName">Service Name</label>
+                        <input type="text" class="form-control"
+                               id="serviceName" placeholder="Service Name"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="swaggerJson">SwaggerJson</label>
+                        <textarea class="form-control" rows="20"
+                                  id="swaggerJson" placeholder="Swagger Json"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="serviceSwaggerUrl">Swagger Url</label>
+                        <input type="text" class="form-control"
+                               id="serviceSwaggerUrl" placeholder="SwaggerUrl"/>
+                        <input id = "urlUpdate" type = "checkbox"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="serviceVersion">Version</label>
+                        <input type="text" class="form-control"
+                               id="serviceVersion" placeholder="Version"/>
+                    </div>
+                    </form>
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default"
+                            data-dismiss="modal">
+                        Close
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="updateService();">
+                        Update Swagger
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
