@@ -5,16 +5,18 @@ import java.time.Instant;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "configuration")
 public class AgjConfiguration {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "ID")
     private Integer id;
 
-    @Column(name = "apis_yaml")
+    @Column(name = "APIS_YAML")
     private String apis;
 
-    @Column(name = "updated_dt")
+    @Column(name = "UPDATE_DT")
     private Instant updatedTime;
 
     public Instant getUpdatedTime() {

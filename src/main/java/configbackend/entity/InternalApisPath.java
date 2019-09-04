@@ -15,23 +15,24 @@ public class InternalApisPath {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "ID")
     private Integer id;
 
-    @Column(name = "endpoint")
+    @Column(name = "ENDPOINT")
     @NotNull
     private String endpoint;
 
-    @Column(name = "method")
+    @Column(name = "METHOD")
     @NotNull
     private String method;
 
-    @Column(name = "trnsTypeId")
+    @Column(name = "TRNS_TYPE_ID")
     private Integer trnsTypeId;
 
-    @Column(name = "disp")
+    @Column(name = "DISP")
     private Boolean display;
 
-    @Column(name = "auth")
+    @Column(name = "AUTH")
     private Boolean authorize;
 
     private Persist persist;

@@ -6,9 +6,9 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class Persist {
 
-    @Column(name = "headers")
+    @Column(name = "HEADERS")
     private String headers;
-    @Column(name = "queryParams")
+    @Column(name = "QUERY_PARAMS")
     private String queryParams;
 
     public String getHeaders() {

@@ -10,22 +10,23 @@ public class SwaggerEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "ID")
     private Integer id;
 
-    @Column(name = "service")
+    @Column(name = "SERVICE")
     @NotNull
     @Size(min = 1)
     private String service;
 
-    @Column(name = "content")
+    @Column(name = "CONTENT")
     @NotNull
     @Size(min = 1)
     private String content;
 
-    @Column
+    @Column(name = "SWAGGER_URL")
     private String swaggerurl;
 
-    @Column(name = "version")
+    @Column(name = "VERSION")
     private String version;
 
     public String getService() {
